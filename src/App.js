@@ -1,23 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Closet from './Closet';
+import Suitcase from './Suitcase';
+import { items } from './items';
 
-function App() {
+const App = () => {
+
+  class ApiUtils {
+    static getAllInventory() {
+      return new Promise((resolve) => {
+        resolve([
+          {
+            id: 1,
+            name: "Pants",
+          },
+          {
+            id: 2,
+            name: "Shoes",
+          },
+          {
+            id: 3,
+            name: "Shirt",
+          },
+        ]);
+      });
+    }
+  }
+
+  const [closet, setCloset] = useState(items)
+  const [suitcase, setSuitcase] = useState([])
+
+  const handleCloset = item => {
+    setCloset(prev => prev.filter(i => i.name !== item.name))
+    setSuitcase([...suitcase, item])
+  }
+
+  const handleSuitcase = item => {
+    setSuitcase(prev => prev.filter(i => i.name !== item.name))
+    setCloset([...closet, item])
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ display: "flex" }}>
+      <Closet closet={closet} handleCloset={handleCloset} />
+      <Suitcase suitcase={suitcase} handleSuitcase={handleSuitcase} />
     </div>
   );
 }
